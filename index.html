@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .grid-item {
+        background-color: green;
+        display: inline-block;
+        width: 100px;
+        height: 200px;
+      }
+
+      #checkboxes input[type="checkbox"] {
+        display: none;
+      }
+
+      #checkboxes input[type="checkbox"]:checked + .grid-item {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <body>
+    <div id="checkboxes">
+      <input type="checkbox" name="rGroup" value="0" id="LED04" />
+      <label class="grid-item" for="LED04"></label>
+      <input type="checkbox" name="rGroup" value="1" id="LED17" />
+      <label class="grid-item" for="LED17"></label>
+      <input type="checkbox" name="rGroup" value="2" id="LED27" />
+      <label class="grid-item" for="LED27"></label>
+      <input type="checkbox" name="rGroup" value="3" id="LED22" />
+      <label class="grid-item" for="LED22"></label>
+      <input type="checkbox" name="rGroup" value="4" id="LED18" />
+      <label class="grid-item" for="LED18"></label>
+      <input type="checkbox" name="rGroup" value="5" id="LED23" />
+      <label class="grid-item" for="LED23"></label>
+      <input type="checkbox" name="rGroup" value="6" id="LED24" />
+      <label class="grid-item" for="LED24"></label>
+      <input type="checkbox" name="rGroup" value="7" id="LED25" />
+      <label class="grid-item" for="LED25"></label>
+      <input type="checkbox" name="rGroup" value="8" id="LED12" />
+      <label class="grid-item" for="LED12"></label>
+      <input type="checkbox" name="rGroup" value="9" id="LED16" />
+      <label class="grid-item" for="LED16"></label>
+    </div>
+    <script>
+      let socket = io();
+
+      const checkboxes = document.querySelectorAll(".grid-item");
+      Array.from(checkboxes).forEach((checkbox) => {
+        checkbox.addEventListener("click", classToggler);
+      });
+
+      let enumerator = 0;
+      function classToggler(e) {
+        //alert(e.target.htmlFor);
+        if (enumerator === 1) {
+          enumerator -= 1;
+        } else {
+          enumerator += 1;
+        }
+        socket.emit(e.target.htmlFor, Number(enumerator));
+      }
+    </script>
+  </body>
+</html>
