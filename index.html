@@ -63,3 +63,32 @@
     </script>
   </body>
 </html>
+
+
+
+######NEW STUFF
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="checkboxes"></div>
+<script>
+    const ledItem = "<input type=\"checkbox\" name=\"rGroup\" value=\"0\" id=\"LED04\" />\n" +
+        "      <label class=\"grid-item\" for=\"LED04\"></label>"
+    const LED_IDS = [4,17]
+    const allChecks = LED_IDS.map(ledId => {
+        const itemHTML =
+        `<input type="checkbox" name="rGroup" value="0" id="LED${ledId}" />
+      <label class="grid-item" for="LED${ledId}"></label>`
+        itemHTML.addEventListener
+    })
+    document.getElementById('checkboxes').appendChild(allChecks)
+</script>
+</body>
+</html>
+Shared in
+
