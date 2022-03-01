@@ -143,3 +143,57 @@ process.on("SIGINT", function () {
   leds.unexport(); // Unexport LED GPIO to free resources
   process.exit(); //exit completely
 });
+
+
+
+###NEW STUFF
+
+let http = require("http")
+let fs = require("fs");
+let io = require("socket.io")(http);
+let Gpio = require("onoff").Gpio;
+const LED_IDS = [4,17,27,22];
+const LED_REF = LED_IDS
+    .reduce((ledMap, ledId) => {
+        const newLED = new Gpio(ledId, "out")
+        return {
+            ...ledMap,
+            [ledId]: newLED
+        }
+    },{});
+io.sockets.on("connection", (socket) => {
+    /*socket.on("LED04", (data) => onLEDUpdate(4, data);
+    socket.on("LED17", (data) => onLEDUpdate(17, data);*/
+    LED_IDS.map(ledId => socket.on(`LED${ledId}`, (data) => onLEDUpdate(ledId, data)));
+    socket.on("LEDS_UPDATED", (data)=>{
+        // TODO: Update LEDS
+        //{
+        //    4: true,
+         //   17: false
+        //}
+        //[
+         //   [4, true],
+         //   [17, false]
+        //]
+        Object.entries(data).map(([ledId, isOn])=>{
+            LED_REF[ledId].writeSync(isOn ? 1 : 0)
+        })
+    })
+})
+const onLEDUpdate = (ledId, newLightValue) => {
+    let lightvalue = 0;
+    lightvalue = newLightValue;
+    if (lightvalue != LED_REF[ledId].readSync()) {
+        //only change LED if status has changed
+        LED_REF[ledId].writeSync(lightvalue); //turn LED on or off
+    }
+}
+socket.on("LED04", function (data) {
+    let lightvalue = 0;
+    //get light switch status from client
+    lightvalue = data;
+    if (lightvalue != LED04.readSync()) {
+        //only change LED if status has changed
+        LED04.writeSync(lightvalue); //turn LED on or off
+    }
+});
